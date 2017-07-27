@@ -1,22 +1,22 @@
-const express             = require('express');
-const bodyParser          = require('body-parser');
-const validator           = require('express-validator');
-const router              = require('./routes');
-const mongoose            = require('mongoose');
-const nodeEnv             = process.env.NODE_ENV || "development";
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const expressValidator = require('express-validator');
+const routes = require('./routes/routes.js');
 
 const app = express();
 
-app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded( {extended: true} ) );
+app.use('/static', express.static('static'));
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(routes);
 
-app.use(router);
+app.use(expressValidator());
 
-app.set( 'port', (process.env.PORT || 3000) );
-
-if(require.main === module){
-  mongoose.connect(config.mongoURL);
-  app.listen(app.get('port'), () => console.log("App running on port ", app.get('port')) );
+if (require.main === module) {
+  app.listen(3000, function () {
+      console.log('Express running on http://localhost:3000/.')
+  });
 }
 
 module.exports = app;
